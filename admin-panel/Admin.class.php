@@ -11,13 +11,24 @@ use DataBase\DataBase;
 class Admin
 {
 
+    public function __construct()
+    {
+        $this->dataBase = new DataBase();
+        $auth = new Auth();
+        $auth->checkAdmin();
+        $this->userId = $_SESSION['user'];
 
-    protected $dataBase;
 
-    protected $setting;
-    protected $title;
-    protected $user;
-    protected $unseenCommentCount;
+        $sql = "SELECT * FROM `setting`;";
+        $this->setting = $this->dataBase->select($sql)->fetch();
+
+        $sql = "SELECT * FROM `users` WHERE id = ?";
+        $this->user = $this->dataBase->select($sql, [$this->userId])->fetch();
+
+        $unseenCommentCountSql = "SELECT COUNT(*)AS count FROM comments WHERE comments.status = 'unseen'";
+        $this->unseenCommentCount = $this->dataBase->select($unseenCommentCountSql)->fetch()['count'];
+
+    }
 
 
     protected function title($title)
@@ -27,16 +38,15 @@ class Admin
     }
 
 
-    protected function redirect($url)
-    {
-        $protocol = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === true ? 'https://' : 'http://';
-        header('location: ' . $protocol . $_SERVER['HTTP_HOST'] . "/cms/panel/" . $url);
+    protected function redirect($url){
+        header("Location: ". trim($this->currentDomain, '/ ') . '/panel/' . trim($url, '/ '));
+        exit();
     }
 
     protected function redirectBack()
     {
         header("Location: " . $_SERVER['HTTP_REFERER']);
-
+        exit();
     }
 
 
@@ -79,30 +89,11 @@ class Admin
     }
 
 
-    protected function removeImage($path)
-    {
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/cms/' . $path;
+    protected function removeImage($path){
+        $path = trim($this->basePath, '/ ') . '/' . trim($path, '/ ');
         unlink($path);
     }
 
-    public function __construct()
-    {
-        $this->dataBase = new DataBase();
-        $auth = new Auth();
-        $auth->checkAdmin();
-        $this->userId = $_SESSION['user'];
-
-
-        $sql = "SELECT * FROM `setting`;";
-        $this->setting = $this->dataBase->select($sql)->fetch();
-
-        $sql = "SELECT * FROM `users` WHERE id = ?";
-        $this->user = $this->dataBase->select($sql, [$this->userId])->fetch();
-
-        $unseenCommentCountSql = "SELECT COUNT(*)AS count FROM comments WHERE comments.status = 'unseen'";
-        $this->unseenCommentCount = $this->dataBase->select($unseenCommentCountSql)->fetch()['count'];
-
-    }
 
     protected function userPosts($id)
     {

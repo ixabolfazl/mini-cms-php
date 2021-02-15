@@ -2,9 +2,7 @@
 
 //config
 define("BASE_PATH", __dir__);
-define("BASE_FOLDER", "cms");
 define("BASE_URL", "http://localhost/cms");
-
 define("DISPLAY_ERROR", true);
 define("DB_HOST", 'localhost');
 define("DB_NAME", 'blog');
@@ -27,4 +25,6 @@ if (DISPLAY_ERROR) {
     ini_set('display_startup_errors', 0);
     error_reporting(0);
 }
+
+
 

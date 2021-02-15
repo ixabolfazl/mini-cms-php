@@ -107,6 +107,6 @@ $this->view("app.layouts.header", compact("title", "mainTitle", "about", "logo",
 <?php
 
 
-$this->view("app.layouts.footer", compact("title", "about", "url", "logoUrl",));
+$this->view("app.layouts.footer", compact("title", "about", "url", "logoUrl"));
 
 ?>

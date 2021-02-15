@@ -335,7 +335,7 @@ $userImage = url($user['image']);
     </div>
 <?php
 
-$this->view("app.layouts.footer", compact("title", "about", "url", "logoUrl",));
+$this->view("app.layouts.footer", compact("title", "about", "url", "logoUrl"));
 
 
 ?>

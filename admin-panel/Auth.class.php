@@ -90,7 +90,7 @@ class Auth
                 $this->redirectBack();
             } else {
                 if (password_verify($password, $user['password'])) {
-                    if ($request['remember']) {
+                    if (isset($request['remember'])) {
 
 
                         $_SESSION['user'] = $user['id'];

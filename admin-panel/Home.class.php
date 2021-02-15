@@ -65,7 +65,7 @@ class Home
             "categoryArticles",
             "comments",
             "previousArticle",
-            "nextArticle",
+            "nextArticle"
         ));
 
     }

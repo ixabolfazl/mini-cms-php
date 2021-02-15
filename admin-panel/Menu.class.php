@@ -68,7 +68,7 @@ class Menu extends Admin
         if ($request['parent_id'] == 'Null') {
             $request['parent_id'] =NUll;
         }
-        $this->dataBase->update('menus', $id, array_keys($request), $request,);
+        $this->dataBase->update('menus', $id, array_keys($request), $request);
         $this->redirect('menu');
 
     }

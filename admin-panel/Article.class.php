@@ -85,7 +85,7 @@ class Article extends Admin
 
 
         if ($request['cat_id'] != null) {
-            $request['image'] = $this->saveImage($request['image'], 'article',);
+            $request['image'] = $this->saveImage($request['image'], 'article');
             if (!$request['image']) {
                 unset($request['image']);
             } else {

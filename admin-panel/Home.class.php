@@ -11,14 +11,6 @@ use DataBase\DataBase;
 class Home
 {
 
-    protected $dataBase;
-    protected $categories;
-    protected $recentArticles;
-    protected $menus;
-    protected $subMenus;
-    protected $setting;
-    protected $userId;
-
 
     public function index()
     {

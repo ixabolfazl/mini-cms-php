@@ -5,8 +5,7 @@ namespace Admin;
 class JWT
 {
 
-    public $extended_exp;
-    public $default_exp;
+
 
     protected function base64UrlEncode($input)
     {

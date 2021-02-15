@@ -3,7 +3,7 @@
 session_start();
 
 require_once "config.php";
-define("CURRENT_DOMAIN", currentDomain() . "/");
+
 //load files
 require_once("admin-panel/Category.class.php");
 require_once("admin-panel/Article.class.php");
@@ -27,15 +27,13 @@ use Admin\Comment;
 
 function asset($src)
 {
-    $domain = trim(CURRENT_DOMAIN, '/ ');
-    $src = $domain . '/' . BASE_FOLDER . "/template/" . trim($src, '/ ');
+    $src = BASE_URL . "/template/" . trim($src, '/ ');
     echo $src;
 }
 
 function url($url)
 {
-    $domain = trim(CURRENT_DOMAIN, '/ ');
-    $url = $domain . '/' . BASE_FOLDER . "/" . ltrim($url, '/ ');
+    $url = BASE_URL . "/" . trim($url, '/ ');
     return $url;
 }
 
@@ -60,104 +58,55 @@ function methodField()
 }
 
 
-function uri($uri, $class, $method, $requestMethod = 'GET')
-{
+function uri($reservedUrl,$class,$method,$requestMethod = 'GET'){
 
-    $values = [];
+    //current url array
+    $currentUrl = explode('?', currentUrl())[0];
+    $currentUrl = str_replace(BASE_URL, '', $currentUrl);
+    $currentUrl = trim($currentUrl,'/');
+    $currentUrlArray = explode('/', $currentUrl);
+    $currentUrlArray = array_filter($currentUrlArray);
 
-    $subURIs = explode('/', $uri);
-    $request_uri = array_slice(explode('/', $_SERVER['REQUEST_URI']), 2);
+    //reserved url array
+    $reservedUrl = trim($reservedUrl, '/');
+    $reservedUrlArray = explode('/', $reservedUrl);
+    $reservedUrlArray = array_filter($reservedUrlArray);
 
-    if ($request_uri[0] == "" or $request_uri[0] == "/") {
 
-        $request_uri[0] = 'home';
 
+
+
+    if (sizeof($currentUrlArray) != sizeof($reservedUrlArray) || methodField() != $requestMethod) {
+        return false;
     }
 
-    $break = false;
-
-    if (count($request_uri) == count($subURIs) and $_SERVER['REQUEST_METHOD'] == $requestMethod) {
-
-        foreach (array_combine($subURIs, $request_uri) as $subURI => $request) {
-
-            if ($subURI[0] == '{' and $subURI[strlen($subURI) - 1] == '}') {
-
-                array_push($values, $request);
-
-            } else {
-
-                if ($subURI != $request) {
-
-                    $break = true;
-                    break;
-
-                }
-
-            }
-
+    //match
+    $parameters = [];
+    for ($key = 0; $key < sizeof($currentUrlArray); $key++) {
+        if ($reservedUrlArray[$key][0] == '{' && $reservedUrlArray[$key][strlen($reservedUrlArray[$key]) - 1] == '}')
+        {
+            array_push($parameters, $currentUrlArray[$key]);
         }
-
-    } else {
-        $break = true;
-    }
-
-    if (!$break) {
-
-        $class = 'Admin\\' . $class;
-        $object = new $class;
-
-        if (count($values) > 0) {
-
-            if ($requestMethod == 'POST') {
-
-                if (isset($_FILES)) {
-
-                    $request = array_merge($_POST, $_FILES);
-                    $object->$method($request, implode(',', $values));
-
-                } else {
-
-                    $object->$method($_POST, implode(',', $values));
-
-                }
-
-            } else {
-
-                $object->$method(implode(',', $values));
-            }
-
-        } else {
-
-            if ($requestMethod == 'POST') {
-
-                if (isset($_FILES)) {
-
-                    $request = array_merge($_POST, $_FILES);
-                    $object->$method($request);
-
-                } else {
-
-                    $object->$method($_POST);
-
-                }
-
-            } else {
-
-                $object->$method();
-
-            }
-
-
+        elseif($currentUrlArray[$key] !== $reservedUrlArray[$key]) {
+            return false;
         }
-
-
-    } else {
-
-
     }
 
+    //request parameter
+    if(methodField() == 'POST') {
+        $request = isset($_FILES) ? array_merge($_POST, $_FILES) : $_POST;
+        $parameters = array_merge([$request], $parameters);
+    }
 
+    $class = "Admin\\" . $class;
+    $object= new $class;
+    call_user_func_array(array($object, $method), $parameters);
+    exit();
 }
+
+
+//Routes
+
 
 //admin
 uri('panel/admin', 'Dashboard', 'index');
@@ -229,6 +178,7 @@ uri('register-store', 'Auth', 'registerStore', 'POST');
 
 //home
 uri('home', 'Home', 'index');
+uri('/', 'Home', 'index');
 uri('show-article/{id}', 'Home', 'show');
 uri('show-category/{id}', 'Home', 'category');
 uri('show-user/{id}', 'Home', 'showUser');

@@ -1,20 +1,13 @@
 <?php
 
 namespace Admin;
-require_once(realpath(dirname(__FILE__)) . "/Jwt.class.php");
-require_once(realpath(dirname(__FILE__)) . '/DataBase.php');
+require_once("Jwt.class.php");
+require_once('DataBase.php');
 
 use DataBase\DataBase;
 
 class Auth
 {
-
-
-    private $jwt;
-    private $dataBase;
-    private $userId;
-    private $title;
-    private $setting;
 
     protected function title($title)
     {
@@ -23,16 +16,15 @@ class Auth
     }
 
 
-    protected function redirect($url)
-    {
-        $protocol = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === true ? 'https://' : 'http://';
-        header('location: ' . $protocol . $_SERVER['HTTP_HOST'] . "/cms/" . $url);
+    protected function redirect($url){
+        header("Location: ". trim($this->currentDomain, '/ ') . '/' . trim($url, '/ '));
+        exit();
     }
 
     protected function redirectBack()
     {
         header("Location: " . $_SERVER['HTTP_REFERER']);
-
+        exit();
     }
 
 
@@ -40,7 +32,7 @@ class Auth
     {
         $this->title("Login");
         if (isset($_SESSION['user'])) {
-            $this->redirect('panel/admin');
+            $this->redirect('panel');
         }
         $this->view("admin.auth.login");
 
@@ -50,7 +42,7 @@ class Auth
     {
         $this->title("Register");
         if (isset($_SESSION['user'])) {
-            $this->redirect('panel/admin');
+            $this->redirect('panel');
         }
         $this->view("admin.auth.register");
 
@@ -224,6 +216,8 @@ class Auth
         $this->dataBase = new DataBase();
 
         $this->checkSet_UserId();
+
+        $this->currentDomain = BASE_URL;
 
         $sql = "SELECT * FROM `setting`;";
         $this->setting = $this->dataBase->select($sql)->fetch();

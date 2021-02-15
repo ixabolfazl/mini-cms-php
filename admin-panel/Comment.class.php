@@ -1,7 +1,7 @@
 <?php
 
 namespace Admin;
-require_once(realpath(dirname(__FILE__)) . '/Admin.class.php');
+require_once('Admin.class.php');
 
 class Comment extends Admin
 {

@@ -3,13 +3,14 @@
 $this->view("admin.layouts.header");
 
 
+$id = $article['id'];
 $title = $article['title'];
 $status = $article['status'];
 $cat_id = $article['cat_id'];
 $summary = $article['summary'];
 $body = $article['body'];
 $image = $article['image'];
-$updateUrl = url("article/update/" . $id);
+$updateUrl = url("panel/article/update/" . $id);
 
 
 ?>

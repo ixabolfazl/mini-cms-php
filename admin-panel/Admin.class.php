@@ -1,8 +1,8 @@
 <?php
 
 namespace Admin;
-require_once(realpath(dirname(__FILE__)) . '/DataBase.php');
-require_once(realpath(dirname(__FILE__)) . '/Auth.class.php');
+require_once('DataBase.php');
+require_once('Auth.class.php');
 
 
 use DataBase\DataBase;
@@ -17,6 +17,8 @@ class Admin
         $auth = new Auth();
         $auth->checkAdmin();
         $this->userId = $_SESSION['user'];
+
+        $this->currentDomain = BASE_URL;
 
 
         $sql = "SELECT * FROM `setting`;";

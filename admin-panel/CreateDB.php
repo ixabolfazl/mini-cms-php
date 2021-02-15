@@ -2,7 +2,7 @@
 
 namespace DataBase;
 
-require_once(realpath(dirname(__FILE__)) . '/DataBase.php');
+require_once('DataBase.php');
 
 class CreateDB extends DataBase
 {

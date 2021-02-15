@@ -2,7 +2,7 @@
 
 
 $this->view("admin.layouts.header");
-$storeUrl = url("article/store");
+$storeUrl = url("panel/article/store");
 
 
 ?>

@@ -3,8 +3,8 @@
 
 namespace Admin;
 
-require_once(realpath(dirname(__FILE__)) . '/DataBase.php');
-require_once(realpath(dirname(__FILE__)) . '/Auth.class.php');
+require_once('DataBase.php');
+require_once('Auth.class.php');
 
 use DataBase\DataBase;
 

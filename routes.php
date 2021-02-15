@@ -63,7 +63,7 @@ function uri($reservedUrl,$class,$method,$requestMethod = 'GET'){
 //Routes
 
 //admin
-uri('panel/admin', 'Dashboard', 'index');
+uri('panel', 'Dashboard', 'index');
 
 //category
 uri('panel/category', 'Category', 'index');

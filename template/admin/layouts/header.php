@@ -8,7 +8,7 @@ $logoUrl = url($logo);
 $unseenCommentCount = $this->unseenCommentCount;
 //urls
 
-$dashboardUrl = url("panel/admin");
+$dashboardUrl = url("panel");
 $articlesUrl = url("panel/article");
 $newArticlesUrl = url("panel/article/create");
 $categoriesUrl = url("panel/category");

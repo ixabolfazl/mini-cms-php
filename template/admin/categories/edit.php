@@ -2,6 +2,7 @@
 
 $this->view("admin.layouts.header");
 
+$id = $category['id'];
 $name = $category['name'];
 $status = $category['status'];
 
